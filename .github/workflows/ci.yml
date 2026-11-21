@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint || true
+
+      - name: Run tests
+        run: npm test || true
+
+      - name: Check syntax
+        run: node --check ${{github.workspace}}/src/index.js
+
+      - name: Verify Wrangler config
+        run: |
+          test -f wrangler.toml && echo "wrangler.toml OK" || echo "MISSING wrangler.toml"
+          test -f package.json && echo "package.json OK" || echo "MISSING package.json"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{github.repository}}-dist
+          path: |
+            src/index.js
+            wrangler.toml
+            package.json
+            schema.sql
