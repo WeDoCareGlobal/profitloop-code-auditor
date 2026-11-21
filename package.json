@@ -1,0 +1,14 @@
+{
+  "name": "profitloop-code-auditor",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Security audit engine for AI-generated code: severity-classified findings + audit reports.",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
